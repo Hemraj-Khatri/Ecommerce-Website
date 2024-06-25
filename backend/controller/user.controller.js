@@ -1,5 +1,5 @@
 import User from '../models/user.model.js';
-import bcrypt from 'bcryptjs';
+// import bcrypt from 'bcryptjs';
  
 const signup = async(req, res, next)=>{
 try {
@@ -13,7 +13,7 @@ try {
         let newuser = await User.create({
         name, 
         email, 
-        password:
+        password,
         isAdmin, 
     }
     );
