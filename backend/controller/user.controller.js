@@ -1,9 +1,10 @@
 import User from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
 import createToken from '../utils/token.utils.js';
+import asynHandler from '../middleware/asynchandler.middleware.js';
  
-const signup = async(req, res, next)=>{
-try {
+const signup = asynHandler(async(req, res, next)=>{
+
     let{name, email, password, isAdmin} = req.body;
     let userexits = await User.findOne({email:email});
     if(userexits){
@@ -30,15 +31,11 @@ try {
 
         }
     });
-} catch (err) {
-    next(err)
-}
-};
+});
 
 
-const login = async (req, res, next) =>{
-    try {
-
+const login = asynHandler(async (req, res, next) =>{
+   
         const {email, password} =req.body;
         //check if user exists
         const user = await User.findOne({email});
@@ -57,14 +54,11 @@ const login = async (req, res, next) =>{
        createToken(res, user._id);
         res.send({message: "login successfully"});
 
-    } catch (error) {
-        next(error)
-    }
-};
-const logout = (req, res)=>{
+    }); 
+const logout = asynHandler((req, res)=>{
     res.clearCookie("jwt");
     res.send({message: "logout Successfully"})
 }
-
+);
 
 export {signup, login, logout}
