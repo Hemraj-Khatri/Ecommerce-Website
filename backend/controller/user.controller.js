@@ -1,5 +1,6 @@
 import User from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
+import createToken from '../utils/token.utils.js';
  
 const signup = async(req, res, next)=>{
 try {
@@ -10,6 +11,7 @@ try {
         err.status = 400;
         throw err;
     }
+    
         let newuser = await User.create({
         name, 
         email, 
@@ -18,6 +20,7 @@ try {
     }
     );
     // let {registerName, registerEmail, registeredIsAdmin} = registeruser
+
     res.send({
         message:"User registered sucessfully",
         user:{
@@ -31,6 +34,7 @@ try {
     next(err)
 }
 };
+
 
 const login = async (req, res, next) =>{
     try {
@@ -50,12 +54,17 @@ const login = async (req, res, next) =>{
             err.status = 400;
             throw err;
         }
-        res.send("Login success");
+       createToken(res, user._id);
+        res.send({message: "login successfully"});
 
     } catch (error) {
         next(error)
     }
+};
+const logout = (req, res)=>{
+    res.clearCookie("jwt");
+    res.send({message: "logout Successfully"})
 }
 
 
-export {signup, login}
+export {signup, login, logout}
