@@ -2,16 +2,14 @@ import User from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
 import createToken from '../utils/token.utils.js';
 import asynHandler from '../middleware/asynchandler.middleware.js';
- 
+ import ApiError from '../utils/apiError.js';
 const signup = asynHandler(async(req, res, next)=>{
 
     let{name, email, password, isAdmin} = req.body;
     let userexits = await User.findOne({email:email});
     if(userexits){
-        let err = new Error(`User with email ${email} already exists!`);
-        err.status = 400;
-        throw err;
-    }
+        throw new ApiError(400,`User with email ${email} already exists!` )
+        }
     
         let newuser = await User.create({
         name, 
@@ -21,7 +19,7 @@ const signup = asynHandler(async(req, res, next)=>{
     }
     );
     // let {registerName, registerEmail, registeredIsAdmin} = registeruser
-
+    createToken(res, newuser._id);
     res.send({
         message:"User registered sucessfully",
         user:{
@@ -40,10 +38,8 @@ const login = asynHandler(async (req, res, next) =>{
         //check if user exists
         const user = await User.findOne({email});
         if(!user){
-            let err = new Error("user with this email does not exist");
-            err.status = 400;
-            throw err;
-        }
+            throw new ApiError(400, "user with this email does not exist")
+            }
         // compare password
         const isMatch  = await bcrypt.compare(password, user.password);
         if(!isMatch){
@@ -61,4 +57,9 @@ const logout = asynHandler((req, res)=>{
 }
 );
 
-export {signup, login, logout}
+const getUsers = asynHandler(async(req, res) =>{
+    let users = await User.find({}).select('-password');
+    res.send(users)
+});
+
+export {signup, login, logout, getUsers}
