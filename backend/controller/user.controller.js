@@ -3,7 +3,11 @@ import bcrypt from 'bcryptjs';
 import createToken from '../utils/token.utils.js';
 import asynHandler from '../middleware/asynchandler.middleware.js';
  import ApiError from '../utils/apiError.js';
-const signup = asynHandler(async(req, res, next)=>{
+ 
+ //@des: register user 
+ //@route: /api/v1/users/signup
+ //@access: public
+ const signup = asynHandler(async(req, res, next)=>{
 
     let{name, email, password, isAdmin} = req.body;
     let userexits = await User.findOne({email:email});
@@ -18,7 +22,7 @@ const signup = asynHandler(async(req, res, next)=>{
         isAdmin, 
     }
     );
-    // let {registerName, registerEmail, registeredIsAdmin} = registeruser
+   
     createToken(res, newuser._id);
     res.send({
         message:"User registered sucessfully",
@@ -31,7 +35,9 @@ const signup = asynHandler(async(req, res, next)=>{
     });
 });
 
-
+ //@des: login user 
+ //@route: /api/v1/users/login
+ //@access: public
 const login = asynHandler(async (req, res, next) =>{
    
         const {email, password} =req.body;
@@ -43,23 +49,54 @@ const login = asynHandler(async (req, res, next) =>{
         // compare password
         const isMatch  = await bcrypt.compare(password, user.password);
         if(!isMatch){
-            let err = new Error("Invalid Password!");
-            err.status = 400;
-            throw err;
+            throw new ApiError(400, "Invalid Password!")
+           
         }
        createToken(res, user._id);
         res.send({message: "login successfully"});
 
     }); 
+
+
+     //@des: logout user 
+ //@route: /api/v1/users/logout
+ //@access: private
 const logout = asynHandler((req, res)=>{
     res.clearCookie("jwt");
     res.send({message: "logout Successfully"})
 }
 );
-
+ //@des: Get All  users 
+ //@route: /api/v1/users
+ //@access: private/admin
 const getUsers = asynHandler(async(req, res) =>{
     let users = await User.find({}).select('-password');
     res.send(users)
 });
 
-export {signup, login, logout, getUsers}
+ //@des: fetch logined  user  
+ //@route: /api/v1/users/profile(get request)
+ //@access: private
+const getUserProfile = asynHandler(async(req, res)=>{
+    if(req.user){
+        res.send(req.user)
+    }
+});
+ //@des: update  user 
+ //@route: /api/v1/profile (put request)
+ //@access: private
+const updateUserProfile = asynHandler(async(req, res)=>{
+    if(req.user){
+        let user = await User.findById(req.user._id);
+        user.name = req.body.name || user.name;
+        user.email = req.body.email || user.email;
+        if(req.body.password){
+            user.password = req.body.password;
+        }
+        let updateUser = await user.save();
+        res.send({message:"user profile updated", user: updateUser})
+    }
+})
+
+
+export {signup, login, logout, getUsers, getUserProfile, updateUserProfile}
