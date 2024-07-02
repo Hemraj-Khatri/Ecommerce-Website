@@ -73,3 +73,15 @@
 2024/7/1 - PUT /api/v1/products/addreview/66824419548ac480b20ad486 ::1 200 67ms
 2024/7/1 - PUT /api/v1/products/addreview/66824419548ac480b20ad486 ::1 200 21ms
 2024/7/1 - PUT /api/v1/products/addreview/66824419548ac480b20ad486 ::1 400 35ms
+2024/7/2 - POST /api/v1/users/login ::1 200 1376ms
+2024/7/2 - POST /api/v1/users/login ::1 200 927ms
+2024/7/2 - POST /api/v1/users/login ::1 200 768ms
+2024/7/2 - GET /api/v1/products ::1 200 17ms
+2024/7/2 - PUT /api/v1/products/addreview/66819243333039015ed90ce8 ::1 200 53ms
+2024/7/2 - PUT /api/v1/products/addreview/66819243333039015ed90ce8 ::1 400 9ms
+2024/7/2 - GET /api/v1/users ::1 403 6ms
+2024/7/2 - POST /api/v1/users/signup ::1 200 647ms
+2024/7/2 - POST /api/v1/users/login ::1 200 629ms
+2024/7/2 - GET /api/v1/users ::1 200 17ms
+2024/7/2 - PUT /api/v1/products/addreview/66819243333039015ed90ce8 ::1 200 21ms
+2024/7/2 - POST /api/v1/users/login ::1 400 451ms

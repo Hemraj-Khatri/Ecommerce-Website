@@ -92,10 +92,22 @@ const addUserReview = asynHandler(async(req, res)=>{
         user:req.user._id,
         rating,
         comment,
-    })
+    });
+    product.numReviews = product.reviews.length;
+    product.rating = product.reviews.reduce((acc, review) => acc + review.rating, 0) / product.reviews.length;
+
     await product.save();
     res.send({message: "Review added to product"})
 })
+
+
+
+
+
+
+
+
+
 
 
 const toTenProduct = asynHandler(async(req, res)=>{
