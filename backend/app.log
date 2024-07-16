@@ -85,3 +85,8 @@
 2024/7/2 - GET /api/v1/users ::1 200 17ms
 2024/7/2 - PUT /api/v1/products/addreview/66819243333039015ed90ce8 ::1 200 21ms
 2024/7/2 - POST /api/v1/users/login ::1 400 451ms
+2024/7/16 - POST /api/v1/users/login ::1 400 57ms
+2024/7/16 - POST /api/v1/users/signup ::1 500 26ms
+2024/7/16 - POST /api/v1/users/signup ::1 200 1108ms
+2024/7/16 - POST /api/v1/users/signup ::1 400 18ms
+2024/7/16 - POST /api/v1/users/login ::1 200 864ms

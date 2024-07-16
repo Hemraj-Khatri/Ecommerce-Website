@@ -11,7 +11,7 @@ const checkAuth = asynHandler(async(req, res, next)=>{
     try {
         let {userId} =jwt.verify(token, process.env.JWT_SECRET);
         let userdetail = await User.findById(userId).select("-password");
-        req.user = userdetail;
+        req.user = userdetail; // confused 
         next();
     } catch (error) {
         let err = new Error ("Invalid Token");
