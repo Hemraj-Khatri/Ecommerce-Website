@@ -1,7 +1,7 @@
 import { Container } from "react-bootstrap";
 
 function Footer() {
-  let currentYear = new Date().getFullYear;
+  let currentYear = new Date().getFullYear();
   return (
     <footer>
       <Container>

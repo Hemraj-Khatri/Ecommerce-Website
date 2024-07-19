@@ -1,19 +1,15 @@
 import { Row, Col, Image, ListGroup, Button } from "react-bootstrap";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Rating from "../components/Rating";
 function ProductPage() {
-  let product = {
-    name: "iPhone 13 Pro 256GB Memory",
-    image: "/images/phone.jpg",
-    description:
-      "Introducing the iPhone 13 Pro. A transformative triple-camera system that adds tons of capability without complexity. An unprecedented leap in battery life",
-    brand: "Apple",
-    category: "Electronics",
-    price: 599.99,
-    countInStock: 6,
-    rating: 4.0,
-    numReviews: 8,
-  };
+  const [product, setProduct] = useState({});
+  useEffect(() => {
+    axios
+      .get("/api/v1/products/6699c8d0959206a49b498ba8")
+      .then((resp) => setProduct(resp.data))
+      .catch((err) => console.log(err.message));
+  }, []);
   return (
     <>
       <Row>

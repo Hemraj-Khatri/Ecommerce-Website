@@ -19,7 +19,7 @@ function Header() {
                 <FaShoppingCart />
                 Cart
               </NavLink>
-              <NavLink to="/signin" className="nav-link">
+              <NavLink to="/product" className="nav-link">
                 <FaUser />
                 Signin
               </NavLink>

@@ -1,7 +1,16 @@
 import { Row, Col } from "react-bootstrap";
-import products from "../../Product";
 import Product from "../components/Product";
+import { useEffect, useState } from "react";
 function HomePage() {
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    fetch("/api/v1/products")
+      .then((resp) => resp.json())
+      .then((data) => setProducts(data))
+      .catch((err) =>
+        console.log("Error Occur while fetching api", err.message)
+      );
+  }, []);
   return (
     <Row>
       {products.map((product) => (
