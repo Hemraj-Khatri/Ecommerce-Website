@@ -1,18 +1,34 @@
-import { Row, Col, Image, ListGroup, Button } from "react-bootstrap";
-import React, { useEffect, useState } from "react";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Button, Col, Form, Image, ListGroup, Row } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Rating from "../components/Rating";
+import { addItem } from "../slices/Carts";
 function ProductPage() {
   const [product, setProduct] = useState({});
+  const [qty, setQty] = useState(1);
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   useEffect(() => {
     axios
-      .get("/api/v1/products/6699c8d0959206a49b498ba8")
+      .get("/api/v1/products/" + id)
       .then((resp) => setProduct(resp.data))
       .catch((err) => console.log(err.message));
   }, []);
+
+  const addToCartHandler = (item) => {
+    dispatch(addItem(item));
+    navigate("/cart");
+  };
   return (
     <>
-      <Row>
+      <Link to="/" className="btn btn-success">
+        Go Back
+      </Link>
+      <Row className="my-3">
         <Col md={5}>
           <Image src={product.image} fluid></Image>
         </Col>
@@ -57,11 +73,26 @@ function ProductPage() {
               </Row>
             </ListGroup.Item>
             <ListGroup.Item>
+              <Form.Control
+                as="select"
+                value={qty}
+                onChange={(e) => setQty(e.target.value)}
+              >
+                {[...Array(product.countInStock).keys()].map((x) => (
+                  <option key={x + 1}>{x + 1}</option>
+                ))}
+              </Form.Control>
+            </ListGroup.Item>
+
+            <ListGroup.Item>
               <Row>
                 <Col>
                   <Button
                     variant="secondary"
                     disabled={product.countInStock <= 0}
+                    onClick={() =>
+                      addToCartHandler({ ...product, qty: Number(qty) })
+                    }
                   >
                     Add to Cart
                   </Button>
